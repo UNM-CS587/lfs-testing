@@ -3,7 +3,6 @@
 # Relies on the pytest-cmake package being installed in python
 # typically via `pip install pytest-cmake --user`
 
-
 # Use the Pytest Cmake package to handle discocering and running python tests
 find_package(Pytest)
 
@@ -11,15 +10,15 @@ if (ENABLE_LFS_C_LIBRARY)
     pytest_discover_tests(
         LFSTest
         LIBRARY_PATH_PREPEND
-            $<TARGET_FILE_DIR:liblfs>
+            $<TARGET_FILE_DIR:lfs>
         PYTHON_PATH_PREPEND
-            $<TARGET_FILE_DIR:liblfs>
+            $<TARGET_FILE_DIR:lfs>
         TRIM_FROM_NAME "^test_"
-        DEPENDS liblfs
+        DEPENDS lfs
     )
 else (ENABLE_LFS_C_LIBRARY)
     pytest_discover_tests(
         LFSTest
         TRIM_FROM_NAME "^test_"
     )
-endif (LFS_C_LIBRARY)
+endif (ENABLE_LFS_C_LIBRARY)

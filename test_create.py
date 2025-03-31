@@ -1,4 +1,4 @@
-from src.lfs import *
+from lfs import *
 
 def test_empty_journal_length():
     # Remove any journal if it already exists
