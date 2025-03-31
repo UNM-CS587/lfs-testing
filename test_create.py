@@ -5,6 +5,7 @@ def test_empty_journal_length():
     try:
         os.remove("lfstest.log")
     except FileNotFoundErrror:
+        pass
 
     # Use LFS_Log to create a new journal
     l = LFS_Log("lfstest.log")
@@ -25,6 +26,7 @@ def test_empty_journal_structure():
     try:
         os.remove("lfstest.log")
     except FileNotFoundErrror:
+        pass
 
     # Use LFS_Log to create a new journal
     l = LFS_Log("lfstest.log")
