@@ -33,5 +33,6 @@ def test_empty_journal_structure():
 
     # Lookup '.' in the root inode and make sure it is inode 0
     assert l.lookup(0, ".") == 0
+
     # Lookup '..' in the root inode and make sure it is inode 0
     assert l.lookup(0, "..") == 0

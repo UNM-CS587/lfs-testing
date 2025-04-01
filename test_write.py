@@ -34,7 +34,7 @@ def test_single_write():
     # Close the log
     l = None
 
-def test_read_write_contents():
+def test_single_read():
     # Use LFS_Log to open the existing log
     l = LFS_Log("lfstest.log")
 
@@ -102,8 +102,8 @@ def test_skip_write():
     l = None;
 
 
-# Test end read - see what happens if we read from a skipped interior
-# block in a file
+# Test skip read - see what happens if we read from a skipped interior
+# block in a file. 
 def test_skip_read():
     # Use LFS_Log to open the existing log
     l = LFS_Log("lfstest.log")
@@ -111,7 +111,7 @@ def test_skip_read():
     fnum = l.lookup(0, "testfile.bin")
     assert fnum > 0
     
-    # Block 2 hasn't been written but should still be in the file.
+    # Block 2 hasn't been written but should still be in the file
     # since its inside the length. Read should return 4096 bytes of 0
     b = l.read(fnum, 2, b)
     assert len(b) = 4096
