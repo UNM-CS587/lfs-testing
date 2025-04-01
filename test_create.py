@@ -1,27 +1,6 @@
 from lfs import *
 
-def test_empty_journal_length():
-    # Remove any journal if it already exists
-    try:
-        os.remove("lfstest.log")
-    except FileNotFoundErrror:
-        pass
-
-    # Use LFS_Log to create a new journal
-    l = LFS_Log("lfstest.log")
-    # Close that log 
-    l = None;
-
-    # Make sure it is the right length - it should have:
-    # a Checkpoint region (4 + 256*4 = 1028 bytes) 
-    # a root directory block (4096 bytes) with '.' and '..' entries
-    # a root inode (32 bytes)
-    # a single inode map entry (16*4 = 64 bytes)
-    # Total: 5220 bytes
-    s = os.stat("lfstest.log")
-    assert s.st_size == 5220 
-
-def test_empty_journal_structure():
+def test_create_empty_file():
     # Remove any journal if it already exists
     try:
         os.remove("lfstest.log")
@@ -31,7 +10,45 @@ def test_empty_journal_structure():
     # Use LFS_Log to create a new journal
     l = LFS_Log("lfstest.log")
 
-    # Lookup '.' in the root inode and make sure it is inode 0
-    assert l.lookup(0, ".") == 0
-    # Lookup '..' in the root inode and make sure it is inode 0
-    assert l.lookup(0, "..") == 0
+    # Create an empty regular file in the root directory
+    fnum1 = l.creat(0, LFS_REGULAR_FILE, "empty.txt")
+    assert fnum1 > 0
+
+    # Look it up and make sure inode numbers match
+    fnum2 = l.lookup(0, "empty.txt")
+    assert fnum1 == fnum2
+ 
+    # release the log object 
+    l = None
+
+def test_stat_empty_file():
+    # Open the existing log
+    l = LFS_Log("lfstest.log")
+
+    # Look it the still existing empty file
+    fnum = l.lookup(0, "empty.txt")
+    assert fnum > 0
+
+    # Stat the file and see if its type and size are right
+    type, size = l.stat(fnum)
+    assert type == LFS_REGULAR_FILE
+    assert size == 0
+
+    # Release the log
+    l = None
+
+def test_directory_size():
+    # Open the existing log
+    l = LFS_Log("lfstest.log")
+    
+    # Stat the root directory
+    type, size = l.stat(0)
+
+    # It should be a directory
+    assert type == LFS_DIRECTORY
+
+    # Still with one block of data
+    assert size == 4096
+
+    # Release the log
+    l = None
