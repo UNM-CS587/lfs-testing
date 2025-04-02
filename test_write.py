@@ -1,10 +1,11 @@
 from lfs import *
+import os
 
 def test_single_write():
     # Remove any journal if it already exists
     try:
         os.remove("lfstest.log")
-    except FileNotFoundErrror:
+    except FileNotFoundError:
         pass
 
     # Use LFS_Log to create a new journal
@@ -54,7 +55,7 @@ def test_invalid_write():
     except:
         pass
     else:
-        throw AssertError("Write to invalid inode number did not throw an exception")
+        raise AssertionError("Write to invalid inode number did not throw an exception")
 
     # Write to invalid block number
     try:
@@ -62,7 +63,7 @@ def test_invalid_write():
     except:
         pass
     else:
-        throw AssertError("Write to invalid inode number did not throw an exception")
+        raise AssertionError("Write to invalid inode number did not throw an exception")
 
 def test_single_read():
     # Use LFS_Log to open the existing log

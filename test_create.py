@@ -1,10 +1,11 @@
 from lfs import *
+import os
 
 def test_create_empty_file():
     # Remove any journal if it already exists
     try:
         os.remove("lfstest.log")
-    except FileNotFoundErrror:
+    except FileNotFoundError:
         pass
 
     # Use LFS_Log to create a new journal
