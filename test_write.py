@@ -27,7 +27,7 @@ def test_single_write():
         b[i] = (4096 - i) & 0xff
 
     # Write it to the file
-    l.write(fnum, 0, b)
+    l.write(fnum, bytes(b), 0)
 
     # Stat the file and check its length
     type, size = l.stat(fnum)
@@ -51,7 +51,7 @@ def test_invalid_write():
 
     # Write to invalid inode number
     try:
-        l.write(514, 0, b)
+        l.write(514, bytes(b), 0)
     except:
         pass
     else:
@@ -59,7 +59,7 @@ def test_invalid_write():
 
     # Write to invalid block number
     try:
-        l.write(fnum, 15, b)
+        l.write(fnum, b, 15)
     except:
         pass
     else:
@@ -96,7 +96,7 @@ def test_second_write():
     for i in range(4096):
         b[i] = (4096 - i) & 0xff
     # Write it to the file
-    l.write(fnum, 1, b)
+    l.write(fnum, bytes(b), 1)
 
     # Stat the file and check its length
     type, size = l.stat(fnum)
@@ -121,7 +121,7 @@ def test_skip_write():
     for i in range(4096):
         b[i] = (4096 - i) & 0xff
     # Write it to the file
-    l.write(fnum, 3, b)
+    l.write(fnum, bytes(b), 3)
 
     # Stat the file and check its length. It should be 
     # *4* blocks long
@@ -144,7 +144,7 @@ def test_skip_read():
     
     # Block 2 hasn't been written but should still be in the file
     # since its inside the length. Read should return 4096 bytes of 0
-    b = l.read(fnum, 2, b)
+    b = l.read(fnum, 2)
     assert len(b) == 4096
     for i in range(4096):
         assert b[i] == 0 

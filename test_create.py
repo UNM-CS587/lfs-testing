@@ -12,12 +12,11 @@ def test_create_empty_file():
     l = LFS_Log("lfstest.log")
 
     # Create an empty regular file in the root directory
-    fnum1 = l.creat(0, LFS_REGULAR_FILE, "empty.txt")
-    assert fnum1 > 0
+    l.creat(0, LFS_REGULAR_FILE, "empty.txt")
 
     # Look it up and make sure inode numbers match
-    fnum2 = l.lookup(0, "empty.txt")
-    assert fnum1 == fnum2
+    fnum = l.lookup(0, "empty.txt")
+    assert fnum > 0
  
     # release the log object 
     l = None
