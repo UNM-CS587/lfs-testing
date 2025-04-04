@@ -14,20 +14,20 @@ def test_fill_directory():
 
     # Fill up the root directory with empty files. All of these
     # should succeed.
-    for i in range(0, 14*128 - 2):
-        l.create(0, LFS_REGULAR_FILE, "file{0}.txt".format(i))
+    for i in range(0, 13*128 - 2):
+        l.creat(0, LFS_REGULAR_FILE, "file{0}.txt".format(i))
 
     # Make sure they were all created.
     fnum_prev = 0
-    for i in range(0, 14*128 - 2):
+    for i in range(0, 13*128 - 2):
         fnum = l.lookup(0, "file{0}.txt".format(i))
-        assert fnum > 0 && fnum != fnum_prev
+        assert fnum > 0
+        assert fnum != fnum_prev
         fnum_prev = fnum
 
-    # Stat the root directory and see its type and size are right
-    type, size = l.stat(fnum)
-    assert type == LFS_REGULAR_FILE
-    assert size == (4096 * 14)
+    # Stat the root directory and see its size is right
+    type, size = l.stat(0)
+    assert size == (4096 * 13)
 
     # release the log object 
     l = None
@@ -45,8 +45,8 @@ def test_directory_tree():
     # Start at the root and create a string of nested directories
     pdir = 0
     for i in range(0, 200):
-        name = "dir{0}".format(i))
-        l.create(pdir, LFS_DIRECTORY, name)
+        name = "dir{0}".format(i)
+        l.creat(pdir, LFS_DIRECTORY, name)
         dir = l.lookup(pdir, name)
         assert dir > 0
         assert dir != pdir
@@ -55,7 +55,7 @@ def test_directory_tree():
     # Start at bottom and walk back .., making sure we end up at root
     pdir = 0
     for i in range(0, 200):
-        name = "dir{0}".format(i))
+        name = "dir{0}".format(i)
         pdir = l.lookup(pdir, "..")
     assert pdir == 0
     

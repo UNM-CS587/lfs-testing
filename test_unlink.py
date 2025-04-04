@@ -26,7 +26,7 @@ def test_unlink_empty_file():
         fnum = l.lookup(0, "empty.txt")
     except: 
         pass
-    else
+    else:
         raise AssertionError("Was able to lookup unlinked file.")
 
     # release the log object 
@@ -50,7 +50,7 @@ def test_unlink_empty_directory():
         fnum = l.lookup(0, "emptydir")
     except: 
         pass
-    else
+    else:
         raise AssertionError("Was able to lookup unlinked directory.")
 
     # release the log object 
@@ -74,11 +74,11 @@ def test_unlink_nonempty_directory():
         l.unlink(0, "emptydir")
     except: 
         pass
-    else
+    else:
         raise AssertionError("Was able to unlink non-empty directory.")
 
 def test_unlink_nonexistent_file():
     l = LFS_Log("lfstest.log")
-    l.creat(fnum, LFS_REGULAR_FILE, "empty.txt")
+    l.creat(0, LFS_REGULAR_FILE, "empty.txt")
     l.unlink(0, "empty.txt")
     l.unlink(0, "empty.txt") # This should succeed to ensure idempotency

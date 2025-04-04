@@ -14,7 +14,18 @@ def test_create_empty_file():
     # Create an empty regular file in the root directory
     l.creat(0, LFS_REGULAR_FILE, "empty.txt")
 
-    # Make sure we can look it up
+    # Make sure we can look it up.
+    fnum = l.lookup(0, "empty.txt")
+    assert fnum > 0
+ 
+    # release the log object 
+    l = None
+
+def test_stat_empty_file():
+    # Open the existing log
+    l = LFS_Log("lfstest.log")
+
+    # Look it the still existing empty file
     fnum = l.lookup(0, "empty.txt")
     assert fnum > 0
  
@@ -26,7 +37,7 @@ def test_create_empty_file():
     # release the log object 
     l = None
 
-def test_create_directory()
+def test_create_directory():
     # Open the existing log
     l = LFS_Log("lfstest.log")
 
@@ -81,7 +92,6 @@ def test_create_duplicate_name():
     numdot = 0
     for i in range(0,128):
         str = bytes[i*32:i*32+28].split(b'\x00')[0].decode('utf-8')
-        print str
         if str == ".":
-            numdot++
+            numdot = numdot + 1
     assert numdot == 1
