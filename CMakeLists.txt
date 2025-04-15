@@ -19,6 +19,8 @@ if (ENABLE_LFS_C_LIBRARY)
 else (ENABLE_LFS_C_LIBRARY)
     pytest_discover_tests(
         LFSTest
+        PYTHON_PATH_PREPEND
+            ${CMAKE_CURRENT_BINARY_DIR}/../src
         TRIM_FROM_NAME "^test_"
     )
 endif (ENABLE_LFS_C_LIBRARY)
