@@ -92,3 +92,18 @@ def test_create_duplicate_name():
         if str == ".":
             numdot = numdot + 1
     assert numdot == 1
+
+def test_create_duplicate_name_other_type():
+    # Open the existing log
+    l = LFS_Log("lfstest.log")
+
+    # An existing name is an existing name, whatever type is asked for. Asking
+    # for a directory where "empty.txt" is already a regular file succeeds
+    # like any other duplicate, and changes nothing.
+    l.creat(0, LFS_DIRECTORY, "empty.txt")
+
+    # The regular file is still there, still a regular file, still empty
+    fnum = l.lookup(0, "empty.txt")
+    type, size = l.stat(fnum)
+    assert type == LFS_REGULAR_FILE
+    assert size == 0
