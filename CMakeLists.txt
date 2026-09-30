@@ -1,10 +1,12 @@
-# We actually implemenet all test in Python, and so use pytest 
+# We actually implement all tests in Python, and so use pytest
 
 # Relies on the pytest-cmake package being installed in python
 # typically via `pip install pytest-cmake --user`
 
-# Use the Pytest Cmake package to handle discocering and running python tests
-find_package(Pytest)
+# Use the Pytest Cmake package to handle discovering and running python tests
+# REQUIRED because without it a missing pytest-cmake configures cleanly and
+# `make test` then reports success having run no tests at all.
+find_package(Pytest REQUIRED)
 
 if (ENABLE_LFS_C_LIBRARY)
     pytest_discover_tests(
