@@ -71,3 +71,34 @@ def test_unlink_nonexistent_file():
     l.creat(0, LFS_REGULAR_FILE, "empty.txt")
     l.unlink(0, "empty.txt")
     l.unlink(0, "empty.txt") # This should succeed to ensure idempotency
+
+def test_unlink_frees_inode():
+    l = LFS_Log("lfstest.log")
+
+    # Create a file and remember the inode it was given
+    l.creat(0, LFS_REGULAR_FILE, "transient.txt")
+    fnum = l.lookup(0, "transient.txt")
+
+    l.unlink(0, "transient.txt")
+
+    # Unlinking has to free the inode, not just drop the directory entry, so
+    # the inode is no longer in use and stat on it must fail.
+    with pytest.raises(LFSError):
+        l.stat(fnum)
+
+    # release the log object
+    l = None
+
+def test_unlink_frees_inode_on_disk():
+    # Reopening the log must not resurrect the inode freed above, so whatever
+    # the implementation keeps in memory has to have reached the disk.
+    l = LFS_Log("lfstest.log")
+
+    l.creat(0, LFS_REGULAR_FILE, "transient.txt")
+    fnum = l.lookup(0, "transient.txt")
+    l.unlink(0, "transient.txt")
+    l = None
+
+    l = LFS_Log("lfstest.log")
+    with pytest.raises(LFSError):
+        l.stat(fnum)
