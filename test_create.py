@@ -1,5 +1,6 @@
 from lfs import *
 import os
+import pytest
 
 def test_create_empty_file():
     # Remove any journal if it already exists
@@ -69,13 +70,9 @@ def test_create_long_name():
     # Open the existing log
     l = LFS_Log("lfstest.log")
 
-    # Create a file with a long name
-    try: 
+    # Create a file with a long name. This must fail.
+    with pytest.raises(LFSError):
         l.creat(0, LFS_REGULAR_FILE, "thisnameistoolongforcreatetosucceedwithitshouldfail.txt")
-    except:
-        pass
-    else:
-        raise AssertionError("LFS_Creat did not fail with a name that was too long.");
 
 def test_create_duplicate_name():
     # Open the existing log

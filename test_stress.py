@@ -52,10 +52,9 @@ def test_directory_tree():
         assert dir != pdir
         pdir = dir
 
-    # Start at bottom and walk back .., making sure we end up at root
-    pdir = 0
+    # Start at bottom and walk back .., making sure we end up at root. This
+    # picks up where the loop above left off, at the deepest directory.
     for i in range(0, 200):
-        name = "dir{0}".format(i)
         pdir = l.lookup(pdir, "..")
     assert pdir == 0
     

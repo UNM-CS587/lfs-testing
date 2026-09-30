@@ -1,5 +1,6 @@
 from lfs import *
 import os
+import pytest
 
 def test_unlink_empty_file():
     # Remove any journal if it already exists
@@ -21,13 +22,9 @@ def test_unlink_empty_file():
     # Now unlink the file in the root dirctory
     l.unlink(0, "empty.txt")
 
-    # Make sure we can look it up
-    try:
-        fnum = l.lookup(0, "empty.txt")
-    except: 
-        pass
-    else:
-        raise AssertionError("Was able to lookup unlinked file.")
+    # Make sure we can no longer look it up
+    with pytest.raises(LFSError):
+        l.lookup(0, "empty.txt")
 
     # release the log object 
     l = None
@@ -46,12 +43,8 @@ def test_unlink_empty_directory():
     l.unlink(0, "emptydir")
 
     # Make sure we cannot look it up
-    try:
-        fnum = l.lookup(0, "emptydir")
-    except: 
-        pass
-    else:
-        raise AssertionError("Was able to lookup unlinked directory.")
+    with pytest.raises(LFSError):
+        l.lookup(0, "emptydir")
 
     # release the log object 
     l = None
@@ -69,13 +62,9 @@ def test_unlink_nonempty_directory():
     # Now make a file in the empty directory
     l.creat(fnum, LFS_REGULAR_FILE, "empty.txt")
 
-    # Now try to unlink the directory in the root dirctory
-    try:
+    # Now try to unlink the directory in the root dirctory. This must fail.
+    with pytest.raises(LFSError):
         l.unlink(0, "emptydir")
-    except: 
-        pass
-    else:
-        raise AssertionError("Was able to unlink non-empty directory.")
 
 def test_unlink_nonexistent_file():
     l = LFS_Log("lfstest.log")
