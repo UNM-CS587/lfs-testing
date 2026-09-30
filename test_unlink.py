@@ -19,7 +19,7 @@ def test_unlink_empty_file():
     fnum = l.lookup(0, "empty.txt")
     assert fnum > 0
  
-    # Now unlink the file in the root dirctory
+    # Now unlink the file in the root directory
     l.unlink(0, "empty.txt")
 
     # Make sure we can no longer look it up
@@ -39,7 +39,7 @@ def test_unlink_empty_directory():
     fnum = l.lookup(0, "emptydir")
     assert fnum > 0
  
-    # Now unlink the directory in the root dirctory
+    # Now unlink the directory in the root directory
     l.unlink(0, "emptydir")
 
     # Make sure we cannot look it up
@@ -62,7 +62,7 @@ def test_unlink_nonempty_directory():
     # Now make a file in the empty directory
     l.creat(fnum, LFS_REGULAR_FILE, "empty.txt")
 
-    # Now try to unlink the directory in the root dirctory. This must fail.
+    # Now try to unlink the directory in the root directory. This must fail.
     with pytest.raises(LFSError):
         l.unlink(0, "emptydir")
 
