@@ -1,5 +1,6 @@
 from lfs import *
 import os
+import pytest
 
 def test_single_write():
     # Remove any journal if it already exists
@@ -50,20 +51,14 @@ def test_invalid_write():
         b[i] = (4096 - i) & 0xff
 
     # Write to invalid inode number
-    try:
+    with pytest.raises(LFSError):
         l.write(514, bytes(b), 0)
-    except:
-        pass
-    else:
-        raise AssertionError("Write to invalid inode number did not throw an exception")
 
-    # Write to invalid block number
-    try:
-        l.write(fnum, b, 15)
-    except:
-        pass
-    else:
-        raise AssertionError("Write to invalid inode number did not throw an exception")
+    # Write to invalid block number. The buffer has to be a bytes object here
+    # too: ctypes rejects a bytearray before the write is ever attempted, which
+    # would pass this test without the block number being checked at all.
+    with pytest.raises(LFSError):
+        l.write(fnum, bytes(b), 15)
 
 def test_single_read():
     # Use LFS_Log to open the existing log
